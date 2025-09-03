@@ -1,6 +1,11 @@
 template <typename T>
 ArrayList<T>::ArrayList(int i) {
-    // TODO
+     if (i <= 0) {
+        throw string("Array size must be greater than 0");
+    }
+    maxSize = i;
+    buffer = new T[maxSize];
+    length = 0;
 }
 
 template <typename T>
@@ -24,22 +29,41 @@ ArrayList<T>::~ArrayList() {
 
 template <typename T>
 void ArrayList<T>::append(const T& elem) {
-    // TODO
+    if (isFull()) {
+        throw string("ArrayList is full");
+    }
+    buffer[length++] = elem;
 }
 
 template <typename T>
-void ArrayList<T>::clear() {
-    // TODO
+void ArrayList<T>::clear() { 
+    if (buffer != nullptr) {
+    delete[] buffer;
+    buffer = nullptr;
 }
+
+// Then, reset the list's size and capacity
+length = 0;
+maxSize = 0;
+}
+
 
 template <typename T>
 void ArrayList<T>::copy(const ArrayList<T>& copyObj) {
-    // TODO
+    maxSize = copyObj.maxSize;
+    length = copyObj.length;
+    buffer = new T[maxSize];
+    for (int i = 0; i < length; i++) {
+        buffer[i] = copyObj.buffer[i];
+    }
 }
 
 template <typename T>
 T ArrayList<T>::getElement(int position) const {
-    // TODO
+    if (position < 0 || position >= length) {
+        throw string("Invalid position");
+    }
+    return buffer[position];
 }
 
 template <typename T>
@@ -54,7 +78,17 @@ int ArrayList<T>::getMaxSize() const {
 
 template <typename T>
 void ArrayList<T>::insert(int position, const T& elem) {
-    // TODO
+    if (position < 0 || position > length) {
+        throw string("Invalid position");
+    }
+    if (isFull()) {
+        throw string("ArrayList is full");
+    }
+    for (int i = length; i > position; i--) {
+        buffer[i] = buffer[i - 1];
+    }
+    buffer[position] = elem;
+    length++;
 }
 
 template <typename T>
@@ -70,11 +104,22 @@ bool ArrayList<T>::isFull() const {
 template <typename T>
 void ArrayList<T>::remove(int position) {
     // TODO
+    if (position < 0 || position >= length) {
+        throw string("Invalid position");
+    }
+    for (int i = position; i < length - 1; i++) {
+        buffer[i] = buffer[i + 1];
+    }
+    length--;
 }
 
 template <typename T>
 void ArrayList<T>::replace(int position, const T& elem) {
     // TODO
+    if (position < 0 || position >= length) {
+        throw string("Invalid position");
+    }
+    buffer[position] = elem;
 }
 
 template <typename T>
